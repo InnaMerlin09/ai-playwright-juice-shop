@@ -1,0 +1,15 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+tests/generated/
+.env
+# AI / local tooling
+.claude/
+.playwright-mcp/
+_bmad-output/
+_bmad/config.user.toml

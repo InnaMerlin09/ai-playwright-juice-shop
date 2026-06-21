@@ -1,0 +1,56 @@
+{
+  "name": "ai-playwright-juice-shop",
+  "version": "1.0.0",
+  "description": "BDD Playwright framework for OWASP Juice Shop with AI-assisted QA capabilities",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "doctor": "node scripts/doctor.js",
+
+    "bdd:gen": "npx bddgen",
+
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+
+    "app:wait": "npx wait-on http://localhost:3000/api/Products",
+
+    "test": "npx playwright test",
+
+    "test:all": "npm run bdd:gen && npx playwright test",
+    "test:ui": "npm run bdd:gen && npx playwright test --project=ui",
+    "test:ui:headed": "npm run bdd:gen && npx playwright test --project=ui --headed",
+    "test:ui:debug": "npm run bdd:gen && npx playwright test --project=ui --debug",
+    "test:api": "npx playwright test --project=api",
+
+    "test:all:docker": "npm run docker:up && npm run app:wait && npm run test:all ; npm run docker:down",
+    "test:ui:docker": "npm run docker:up && npm run app:wait && npm run test:ui ; npm run docker:down",
+    "test:ui:headed:docker": "npm run docker:up && npm run app:wait && npm run test:ui:headed ; npm run docker:down",
+    "test:ui:debug:docker": "npm run docker:up && npm run app:wait && npm run test:ui:debug ; npm run docker:down",
+    "test:api:docker": "npm run docker:up && npm run app:wait && npm run test:api ; npm run docker:down",
+
+    "report": "npx playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "playwright-bdd",
+    "typescript",
+    "cucumber",
+    "qa",
+    "sdet",
+    "automation",
+    "testing",
+    "ai",
+    "juice-shop"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^25.9.3",
+    "ajv": "^8.20.0",
+    "dotenv": "^17.4.2",
+    "playwright-bdd": "^9.1.0",
+    "wait-on": "^8.0.5"
+  }
+}
