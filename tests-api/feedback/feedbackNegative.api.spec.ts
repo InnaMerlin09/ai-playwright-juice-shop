@@ -5,16 +5,12 @@ import { assertClientErrorResponse } from '../../api/assertions/FeedbackApiAsser
 import { buildFeedback } from '../../api/builders/FeedbackBuilder';
 
 test.describe('Feedback API — Negative Tests', () => {
-
     let adminToken: string;
     const createdIds: number[] = [];
 
     test.beforeAll(async ({ request }) => {
         const response = await request.post('/rest/user/login', {
-            data: {
-                email: env.testUserEmail,
-                password: env.testUserPassword,
-            },
+            data: { email: env.testUserEmail, password: env.testUserPassword },
         });
         const body = await response.json();
         adminToken = body.authentication?.token ?? '';
@@ -140,5 +136,4 @@ test.describe('Feedback API — Negative Tests', () => {
 
         createdIds.push(body.data.id);
     });
-
 });

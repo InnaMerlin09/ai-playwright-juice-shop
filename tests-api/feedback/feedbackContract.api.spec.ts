@@ -6,7 +6,6 @@ import {
 } from '../../api/assertions/FeedbackApiAssertions';
 
 test.describe('Feedback API — Contract Tests', () => {
-
     test('GET /api/Feedbacks responds with status 200', async ({ request }) => {
         const response = await getAllFeedbacks(request);
 
@@ -40,5 +39,4 @@ test.describe('Feedback API — Contract Tests', () => {
 
         expect(response.headers()['content-type']).toContain('application/json');
     });
-
 });

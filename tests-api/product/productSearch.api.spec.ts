@@ -13,7 +13,6 @@ import {
 import { ProductListResponse } from '../../api/models/Product';
 
 test.describe('Product API — Search', () => {
-
     let firstProductId: number;
 
     test.beforeAll(async ({ request }) => {
@@ -89,5 +88,4 @@ test.describe('Product API — Search', () => {
             'SQL injection should be handled gracefully (400) but triggers a 500 server error'
         ).toBe(500);
     });
-
 });

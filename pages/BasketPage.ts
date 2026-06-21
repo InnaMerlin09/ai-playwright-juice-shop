@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-
 import { click } from '../utils/playwrightActions';
 
 export const selectors = {
@@ -8,13 +7,11 @@ export const selectors = {
     basketRow: 'mat-row',
     increaseQuantityButton: 'button:has([data-icon="plus-square"])',
     decreaseQuantityButton: 'button:has([data-icon="minus-square"])',
-    removeItemButton:       'button:has([data-icon="trash-alt"])',
+    removeItemButton: 'button:has([data-icon="trash-alt"])',
     quantityDisplay: 'span.cell-initial-font',
 };
 
-export async function clearBasket(
-    page: Page
-): Promise<void> {
+export async function clearBasket(page: Page): Promise<void> {
     await page.waitForFunction(() => !!localStorage.getItem('token'));
     const token = await page.evaluate(() => localStorage.getItem('token'));
     const response = await page.request.get('/api/BasketItems', {
@@ -28,57 +25,38 @@ export async function clearBasket(
     }
 }
 
-export async function proceedToCheckout(
-    page: Page
-): Promise<void> {
+export async function proceedToCheckout(page: Page): Promise<void> {
     await click(page.locator(selectors.checkoutButton));
 }
 
-export async function increaseProductQuantity(
-    page: Page,
-    productName: string
-): Promise<void> {
+export async function increaseProductQuantity(page: Page, productName: string): Promise<void> {
     await click(
-        page
-            .locator(selectors.basketRow)
+        page.locator(selectors.basketRow)
             .filter({ hasText: productName })
             .locator(selectors.increaseQuantityButton)
     );
 }
 
-export async function decreaseProductQuantity(
-    page: Page,
-    productName: string
-): Promise<void> {
+export async function decreaseProductQuantity(page: Page, productName: string): Promise<void> {
     await click(
-        page
-            .locator(selectors.basketRow)
+        page.locator(selectors.basketRow)
             .filter({ hasText: productName })
             .locator(selectors.decreaseQuantityButton)
     );
 }
 
-export async function removeProduct(
-    page: Page,
-    productName: string
-): Promise<void> {
+export async function removeProduct(page: Page, productName: string): Promise<void> {
     await click(
-        page
-            .locator(selectors.basketRow)
+        page.locator(selectors.basketRow)
             .filter({ hasText: productName })
             .locator(selectors.removeItemButton)
     );
 }
 
-export async function getProductQuantity(
-    page: Page,
-    productName: string
-): Promise<string> {
-    const text = await page
-        .locator(selectors.basketRow)
+export async function getProductQuantity(page: Page, productName: string): Promise<string> {
+    const text = await page.locator(selectors.basketRow)
         .filter({ hasText: productName })
         .locator(selectors.quantityDisplay)
         .textContent();
-
     return text?.trim() ?? '';
 }

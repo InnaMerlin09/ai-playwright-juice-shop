@@ -19,16 +19,12 @@ const TEST_COMMENT = 'Excellent service — automated CRUD test';
 const TEST_RATING = 5;
 
 test.describe.serial('Feedback API — CRUD', () => {
-
     let createdFeedbackId: number;
     let adminToken: string;
 
     test.beforeAll(async ({ request }) => {
         const response = await request.post('/rest/user/login', {
-            data: {
-                email: env.testUserEmail,
-                password: env.testUserPassword,
-            },
+            data: { email: env.testUserEmail, password: env.testUserPassword },
         });
         const body = await response.json();
         adminToken = body.authentication?.token ?? '';
@@ -55,7 +51,6 @@ test.describe.serial('Feedback API — CRUD', () => {
     });
 
     test('GET /api/Feedbacks returns the created feedback', async ({ request }) => {
-
         const response = await getAllFeedbacks(request);
         const body = await response.json();
 
@@ -64,7 +59,6 @@ test.describe.serial('Feedback API — CRUD', () => {
     });
 
     test('DELETE /api/Feedbacks/:id removes the feedback', async ({ request }) => {
-
         const deleteResponse = await deleteFeedback(request, createdFeedbackId, adminToken);
         await assertSuccessfulResponse(deleteResponse);
 
@@ -72,5 +66,4 @@ test.describe.serial('Feedback API — CRUD', () => {
         const body = await listResponse.json();
         await assertFeedbackNotFound(body, createdFeedbackId);
     });
-
 });
