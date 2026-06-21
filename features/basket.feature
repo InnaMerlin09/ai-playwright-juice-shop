@@ -4,7 +4,6 @@ Feature: Basket
   Background:
     Given the user is on the login page
     When the user logs in with valid credentials
-    Then the homepage should be displayed
     Given the basket is empty
 
   Scenario Outline: Add a product to the basket

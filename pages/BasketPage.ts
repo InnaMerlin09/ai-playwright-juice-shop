@@ -15,6 +15,7 @@ export const selectors = {
 export async function clearBasket(
     page: Page
 ): Promise<void> {
+    await page.waitForFunction(() => !!localStorage.getItem('token'));
     const token = await page.evaluate(() => localStorage.getItem('token'));
     const response = await page.request.get('/api/BasketItems', {
         headers: { Authorization: `Bearer ${token}` },

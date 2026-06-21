@@ -51,3 +51,9 @@ export async function pressKey(locator: Locator, key: string): Promise<void> {
 
   await locator.press(key);
 }
+
+export async function clickIfVisible(locator: Locator): Promise<void> {
+  if (await locator.isVisible()) {
+    await locator.click();
+  }
+}

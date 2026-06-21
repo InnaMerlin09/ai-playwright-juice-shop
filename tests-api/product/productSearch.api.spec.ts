@@ -14,6 +14,14 @@ import { ProductListResponse } from '../../api/models/Product';
 
 test.describe('Product API — Search', () => {
 
+    let firstProductId: number;
+
+    test.beforeAll(async ({ request }) => {
+        const response = await getAllProducts(request);
+        const body: ProductListResponse = await response.json();
+        firstProductId = body.data[0].id;
+    });
+
     test('GET /api/Products returns status 200', async ({ request }) => {
         const response = await getAllProducts(request);
 
@@ -29,11 +37,11 @@ test.describe('Product API — Search', () => {
     });
 
     test('GET /api/Products/:id returns the correct product', async ({ request }) => {
-        const response = await getProductById(request, 1);
+        const response = await getProductById(request, firstProductId);
         const body = await response.json();
 
         await assertSuccessfulResponse(response);
-        expect(body.data.id).toBe(1);
+        expect(body.data.id).toBe(firstProductId);
         expect(body.data.name).toBeDefined();
         expect(body.data.price).toBeDefined();
     });

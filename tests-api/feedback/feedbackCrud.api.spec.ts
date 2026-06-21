@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { env } from '../../support/env';
 import {
     getAllFeedbacks,
     createFeedback,
@@ -17,7 +18,7 @@ import { FeedbackSingleResponse } from '../../api/models/Feedback';
 const TEST_COMMENT = 'Excellent service — automated CRUD test';
 const TEST_RATING = 5;
 
-test.describe('Feedback API — CRUD', () => {
+test.describe.serial('Feedback API — CRUD', () => {
 
     let createdFeedbackId: number;
     let adminToken: string;
@@ -25,8 +26,8 @@ test.describe('Feedback API — CRUD', () => {
     test.beforeAll(async ({ request }) => {
         const response = await request.post('/rest/user/login', {
             data: {
-                email: process.env.ADMIN_EMAIL ?? 'admin@juice-sh.op',
-                password: process.env.ADMIN_PASSWORD ?? 'admin123',
+                email: env.testUserEmail,
+                password: env.testUserPassword,
             },
         });
         const body = await response.json();
@@ -54,7 +55,6 @@ test.describe('Feedback API — CRUD', () => {
     });
 
     test('GET /api/Feedbacks returns the created feedback', async ({ request }) => {
-        test.skip(!createdFeedbackId, 'Skipped: feedback was not created in previous step');
 
         const response = await getAllFeedbacks(request);
         const body = await response.json();
@@ -64,7 +64,6 @@ test.describe('Feedback API — CRUD', () => {
     });
 
     test('DELETE /api/Feedbacks/:id removes the feedback', async ({ request }) => {
-        test.skip(!createdFeedbackId || !adminToken, 'Skipped: missing id or admin token');
 
         const deleteResponse = await deleteFeedback(request, createdFeedbackId, adminToken);
         await assertSuccessfulResponse(deleteResponse);

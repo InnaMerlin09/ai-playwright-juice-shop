@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
 
-import { click } from '../utils/playwrightActions';
+import { click, clickIfVisible } from '../utils/playwrightActions';
 
 export const selectors = {
     cookieConsentButton: '.cc-window .cc-btn',
@@ -24,10 +24,7 @@ export const selectors = {
 export async function dismissCookieConsent(
     page: Page
 ): Promise<void> {
-    const banner = page.locator(selectors.cookieConsentButton);
-    if (await banner.isVisible()) {
-        await click(banner);
-    }
+    await clickIfVisible(page.locator(selectors.cookieConsentButton));
 }
 
 export async function selectFirstAddress(

@@ -1,14 +1,7 @@
-import { expect, APIResponse } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { Product, ProductListResponse } from '../models/Product';
 
-export async function assertSuccessfulResponse(
-    response: APIResponse
-): Promise<void> {
-    expect(
-        response.status(),
-        `Expected 200 but got ${response.status()}`
-    ).toBe(200);
-}
+export { assertSuccessfulResponse } from './BaseApiAssertions';
 
 export async function assertProductExists(
     body: ProductListResponse,
@@ -18,23 +11,6 @@ export async function assertProductExists(
         (product: Product) => product.name === productName
     );
     expect(found, `Expected product "${productName}" to exist in results`).toBe(true);
-}
-
-export async function assertProductCount(
-    body: ProductListResponse,
-    expectedCount: number
-): Promise<void> {
-    expect(
-        body.data.length,
-        `Expected ${expectedCount} products but got ${body.data.length}`
-    ).toBe(expectedCount);
-}
-
-export async function assertProductPrice(
-    product: Product,
-    expectedPrice: number
-): Promise<void> {
-    expect(product.price).toBe(expectedPrice);
 }
 
 export async function assertSearchResultsContain(

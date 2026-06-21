@@ -111,12 +111,9 @@ Rather than replacing engineering decisions, AI was used as a collaborative assi
 │
 ├── assertions/
 ├── components/
-├── docs/
 ├── features/
 ├── pages/
-├── prompts/
 ├── scripts/
-├── specs/
 ├── steps/
 ├── support/
 ├── tests/

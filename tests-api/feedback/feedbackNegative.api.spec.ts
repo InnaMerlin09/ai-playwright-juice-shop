@@ -1,9 +1,30 @@
 import { test, expect } from '@playwright/test';
-import { createFeedback, fetchCaptcha } from '../../api/clients/FeedbackApiClient';
+import { env } from '../../support/env';
+import { createFeedback, deleteFeedback, fetchCaptcha } from '../../api/clients/FeedbackApiClient';
 import { assertClientErrorResponse } from '../../api/assertions/FeedbackApiAssertions';
 import { buildFeedback } from '../../api/builders/FeedbackBuilder';
 
 test.describe('Feedback API — Negative Tests', () => {
+
+    let adminToken: string;
+    const createdIds: number[] = [];
+
+    test.beforeAll(async ({ request }) => {
+        const response = await request.post('/rest/user/login', {
+            data: {
+                email: env.testUserEmail,
+                password: env.testUserPassword,
+            },
+        });
+        const body = await response.json();
+        adminToken = body.authentication?.token ?? '';
+    });
+
+    test.afterAll(async ({ request }) => {
+        for (const id of createdIds) {
+            await deleteFeedback(request, id, adminToken);
+        }
+    });
 
     test('POST with wrong captcha answer is rejected with 401', async ({ request }) => {
         const { captchaId } = await fetchCaptcha(request);
@@ -50,11 +71,14 @@ test.describe('Feedback API — Negative Tests', () => {
             .build();
 
         const response = await createFeedback(request, payload);
+        const body = await response.json();
 
         expect(
             response.status(),
             'Rating -1 should be rejected (400) but Juice Shop accepts it (201)'
         ).toBe(201);
+
+        createdIds.push(body.data.id);
     });
 
     test('[Finding] POST with rating above 5 is accepted — validation missing', async ({ request }) => {
@@ -67,11 +91,14 @@ test.describe('Feedback API — Negative Tests', () => {
             .build();
 
         const response = await createFeedback(request, payload);
+        const body = await response.json();
 
         expect(
             response.status(),
             'Rating 999 should be rejected (400) but Juice Shop accepts it (201)'
         ).toBe(201);
+
+        createdIds.push(body.data.id);
     });
 
     test('[Finding] POST with empty comment is accepted — validation missing', async ({ request }) => {
@@ -84,11 +111,14 @@ test.describe('Feedback API — Negative Tests', () => {
             .build();
 
         const response = await createFeedback(request, payload);
+        const body = await response.json();
 
         expect(
             response.status(),
             'Empty comment should be rejected (400) but Juice Shop accepts it (201)'
         ).toBe(201);
+
+        createdIds.push(body.data.id);
     });
 
     test('[Finding] POST with oversized comment is accepted — validation missing', async ({ request }) => {
@@ -101,11 +131,14 @@ test.describe('Feedback API — Negative Tests', () => {
             .build();
 
         const response = await createFeedback(request, payload);
+        const body = await response.json();
 
         expect(
             response.status(),
             'Comment > 10000 chars should be rejected (400) but Juice Shop accepts it (201)'
         ).toBe(201);
+
+        createdIds.push(body.data.id);
     });
 
 });
